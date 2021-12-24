@@ -1,0 +1,4 @@
+[container.image]
+repository= "bookstorecw1"
+name="shipping-service"
+tag="latest"
