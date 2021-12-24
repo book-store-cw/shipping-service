@@ -1,0 +1,8 @@
+[package]
+org = "shipping_service"
+name = "shipping_service"
+version = "0.0.1"
+
+[build-options]
+observabilityIncluded = true
+cloud = "k8s"
