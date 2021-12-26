@@ -21,7 +21,6 @@ jobs:
       uses: ballerina-platform/ballerina-action@master
       env:
         CI_BUILD: true
-        WORKING_DIR: notifications
       with:
         args:
           build
