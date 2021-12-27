@@ -2,7 +2,7 @@ import ballerina/http;
 import ballerina/log;
 
 // By default, Ballerina exposes an HTTP service via HTTP/1.1.
-service /hello on new http:Listener(9090) {
+service /shipping on new http:Listener(9090) {
 
     // Resource functions are invoked with the HTTP caller and the incoming request as arguments.
     resource function get sayHello(http:Caller caller, http:Request req) {
