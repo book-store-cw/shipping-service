@@ -3,11 +3,11 @@ import ballerina/log;
 import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
 import ballerina/sql;
-import ballerina/os;
+import ballerina/io;
 
 
-final string dbservice = os:getEnv("DB_SERVICE");
-final mysql:Client dbClient = check new(host = dbservice, user = "root", password = "password", port = 3306);
+final string dbservice = "localhost";
+final mysql:Client dbClient = check new(host = dbservice, user = "root", password = "", port = 3306);
 
 service /shipping on new http:Listener(9090) {
 
@@ -15,19 +15,9 @@ service /shipping on new http:Listener(9090) {
         sql:ParameterizedQuery query = `SELECT shippingPrice FROM booksdb.shipping WHERE city=${city}`;
         stream<record {}, error?> resultst = dbClient->query(query);
 
-        record {|record {} value;|}|error? result = resultst.next();
-        _ = check resultst.close();
-
-        if result is error {
-            log:printInfo(result.message());
-        } else {
-            if result is record {|record {} value;|} {
-                log:printInfo(result.toString());
-            } else {
-                log:printInfo("Not a record");
-            }
-        }
-
+        check resultst.forEach(function(record {} result) {
+            io:println("Full shipping details: ", result);
+        });
 
         map<json> shippingList = {
             "colombo": {
