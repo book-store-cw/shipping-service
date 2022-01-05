@@ -1,9 +1,23 @@
 import ballerina/http;
 import ballerina/log;
+import ballerinax/mysql.driver as _;
+import ballerina/sql;
+import ballerina/os;
+
+
+final string dbservice = os:getEnv("DB_SERVICE");
+final mysql:Client dbClient = check new(host = dbservice, user = root, password = password, port = 3306);
 
 service /shipping on new http:Listener(9090) {
 
     resource function get shippingPrice/[string city](http:Caller caller, http:Request req) {
+        sql:ParameterizedQuery query = `SELECT shippingPrice FROM booksdb.shipping WHERE city=${city}`;
+        stream<record {}, error?> resultst = dbClient->query(query);
+
+        record {|record {} value;|}|error? result = resultst.next();
+        _ = check resultst.close();
+
+
         map<json> shippingList = {
             "colombo": {
                 city: "colombo",
