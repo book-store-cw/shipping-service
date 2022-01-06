@@ -7,7 +7,8 @@ import ballerina/os;
 
 
 final string dbservice = os:getEnv("DB_SERVICE");
-final mysql:Client dbClient = check new(host = dbservice, user = "root", password = "password", port = 3306);
+final string dbPass = os:getEnv("MYSQL_ROOT_PASSWORD");
+final mysql:Client dbClient = check new(host = dbservice, user = "root", password = dbPass, port = 3306);
 
 service /shipping on new http:Listener(9090) {
 
